@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/assets/images/favicon.png" />
+    <title>Countrify</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body
+    x-cloak
+    x-data="{ darkMode: localStorage.getItem('dark') === 'true'} "
+    x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+    x-bind:class="{ 'dark': darkMode }"
+    class="flex flex-col max-w-screen-xl min-h-screen mx-auto font-sans text-vdb-text"
+  >
+    <!-- Header -->
+    <header
+      class="flex justify-between px-3 py-4 bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
+    >
+      <h3 class="font-bold">Where in the world?</h3>
+      <!-- DarkMode button -->
+      <button
+        @click="darkMode = !darkMode"
+        class="flex items-center gap-1 text-sm font-semibold"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+          />
+        </svg>
+        <span>Dark Mode</span>
+      </button>
+    </header>
+    <!-- Main -->
+    <main
+      class="flex flex-grow px-3 py-8 sm:px-12 bg-vlg dark:bg-vdb dark:text-gray-100"
+    >
+      <!-- 404 -->
+      <div class="flex flex-col items-center gap-8 m-auto">
+        <p class="text-3xl font-bold text-gray-300 md:text-5xl drop-shadow-sm">
+          404 Page not found.
+        </p>
+        <div>
+          <!-- Back to home link -->
+          <a
+            href="/"
+            class="flex items-center gap-2 px-6 py-1 font-semibold text-white bg-blue-500 rounded hover:scale-110 dark:textgray-100 w-max drop-shadow dark:bg-db"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+              />
+            </svg>
+            <span>Back to home</span>
+          </a>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="px-3 py-4 text-center bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
+    >
+      <p>Copyright &copy; 2023 Fawaz Iwalewa. All right reserved.</p>
+    </footer>
+  </body>
+</html>

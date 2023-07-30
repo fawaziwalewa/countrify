@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/assets/images/favicon.png" />
+    <title>Countrify</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script src="/assets/app.js" defer></script>
+    <script>
+      // Get ID from URL 
+      function getID() {
+        let url = window.location.href;
+        // Remove the trailing slash (if present) from the URL
+        if (url.endsWith("/")) {
+          url = url.slice(0, -1);
+        }
+
+        // Get the last part of the URL after the last '/'
+        const parts = url.split("/");
+        const lastText = parts.pop();
+
+        return lastText;
+      }
+    </script>
+  </head>
+  <body
+    x-cloak
+    x-data="{ darkMode: localStorage.getItem('dark') === 'true', country: '', countries: []} "
+    x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+    x-bind:class="{ 'dark': darkMode }"
+    class="flex flex-col max-w-screen-xl min-h-screen mx-auto font-sans text-vdb-text dark"
+  >
+    <!-- Header -->
+    <header
+      class="flex justify-between px-3 py-4 bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
+    >
+      <h3 class="font-bold">Where in the world?</h3>
+      <button
+        @click="darkMode = !darkMode"
+        class="flex items-center gap-1 text-sm font-semibold"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+          />
+        </svg>
+        <span>Dark Mode</span>
+      </button>
+    </header>
+    <!-- Main -->
+    <main
+      class="flex-grow px-3 py-8 sm:px-12 bg-vlg dark:bg-vdb dark:text-gray-100"
+      x-init="() => {
+        fetch('/data.json')
+        .then(response => response.json())
+        .then(data => {
+            countries = Object.values(data);
+            country = countries.find(item => item.alpha3Code.toLowerCase() === getID())
+        })
+      }"
+    >
+      <!-- Back link -->
+      <a
+        href="/"
+        class="flex items-center gap-1 px-6 py-1 text-sm bg-white rounded w-max drop-shadow dark:bg-db"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+          />
+        </svg>
+        <span>Back</span>
+      </a>
+      <!-- Country info -->
+      <div class="grid gap-8 mt-8 md:gap-20 sm:grid-cols-2">
+        <img
+          src="https://flagcdn.com/w320/be.png"
+          alt="country flag"
+          class="w-full"
+          x-bind:src="country.flag"
+        />
+        <div class="">
+          <h3 class="text-xl font-semibold" x-text="country.name">Germany</h3>
+          <div class="flex flex-col justify-between gap-4 mt-5 md:flex-row">
+            <div>
+              <p>
+                <span class="font-semibold">Native Name:</span>
+                <span x-text="country.nativeName">Not available</span>
+              </p>
+              <p>
+                <span class="font-semibold">Population:</span>
+                <span x-text="country.population">Not available</span>
+              </p>
+              <p>
+                <span class="font-semibold">Region:</span>
+                <span x-text="country.region">Not available</span>
+              </p>
+              <p>
+                <span class="font-semibold">Sub Region:</span>
+                <span x-text="country.subregion">Not available</span>
+              </p>
+              <p>
+                <span class="font-semibold">Capital:</span>
+                <span x-text="country.capital">Not available</span>
+              </p>
+            </div>
+            <div class="mt-5 md:mt-0">
+              <p>
+                <span class="font-semibold">Top Level Domain:</span>
+                <span x-text="country.topLevelDomain">Not available</span>
+              </p>
+              <p>
+                <span class="font-semibold">Currencies:</span>
+                <template
+                  x-for="(currency, index) in country.currencies"
+                  :key="index"
+                >
+                  <span>
+                    <span x-text="currency.name"></span>
+                    <span x-show="index < country.currencies.length - 1"
+                      >,</span
+                    >
+                  </span>
+                </template>
+              </p>
+              <p>
+                <span class="font-semibold">Languages:</span>
+                <template
+                  x-for="(language, index) in country.languages"
+                  :key="index"
+                >
+                  <span>
+                    <span x-text="language.name"></span>
+                    <span x-show="index < country.languages.length - 1">,</span>
+                  </span>
+                </template>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 mt-5 md:flex-row">
+            <h3 class="font-semibold">Border Countries:</h3>
+            <div class="flex flex-wrap gap-2 mt-1 text-xs sm:text-sm">
+              <template
+                x-for="(borderCountry, index) in country.borders"
+                :key="index"
+              >
+                <div
+                  class="px-6 py-1 bg-white rounded w-max h-max drop-shadow dark:bg-db"
+                  x-text="() => {
+                    const bCountry = countries.find(item => item.alpha3Code.toLowerCase() === borderCountry.toLowerCase());
+                    return bCountry.name;
+                  }"
+                >
+                  Not available
+                </div>
+              </template>
+              <!-- <div
+                class="px-6 py-1 bg-white rounded w-max h-max drop-shadow dark:bg-db"
+              >
+                France
+              </div>
+              <div
+                class="px-6 py-1 bg-white rounded w-max h-max drop-shadow dark:bg-db"
+              >
+                Germany
+              </div>
+              <div
+                class="px-6 py-1 bg-white rounded w-max h-max drop-shadow dark:bg-db"
+              >
+                Netherlands
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="px-3 py-4 text-center bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
+    >
+      <p>Copyright &copy; 2023 Fawaz Iwalewa. All right reserved.</p>
+    </footer>
+  </body>
+</html>

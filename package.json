@@ -1,0 +1,33 @@
+{
+  "name": "countrify",
+  "version": "1.0.0",
+  "description": "Countrify is a powerful data retrieval website that provides comprehensive country information at your fingertips. Easily access essential data such as population, flag, region, capital, native name, top-level domain, languages, and more for any country in the world.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fawaziwalewa/countrify.git"
+  },
+  "keywords": [
+    "countrify"
+  ],
+  "author": "Fawaz Iwalewa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fawaziwalewa/countrify/issues"
+  },
+  "homepage": "https://github.com/fawaziwalewa/countrify#readme",
+  "dependencies": {
+    "alpinejs": "^3.12.3",
+    "express": "^4.18.2",
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
