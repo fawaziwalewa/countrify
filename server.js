@@ -1,38 +1,30 @@
 const express = require("express");
+const path = require("path");
+const fs = require("fs");
+
 const app = express();
-const port = 3000;
 
-// Serve static files from the "public" folder
-app.use(express.static("public"));
-
-// Route for the home page
-app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: "public" });
-});
-
-// Require the JSON data directly
-const jsonData = require('./public/data.json');
+// Load JSON data
+const jsonData = JSON.parse(fs.readFileSync(path.join(__dirname, "public", "data.json"), "utf8"));
 
 // Route for the view page
 app.get("/view/:id", (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id.toLowerCase();
 
   const item = jsonData.find(item => item.alpha3Code.toLowerCase() === id);
-  
+
   if (!item) {
     // If the item with the provided id is not found, return 404 Not Found.
-    res.status(404).sendFile('404.html', { root: 'public' });
+    return res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
   } else {
     // If the item is found, serve the "view.html" file.
-    res.sendFile("view.html", { root: "public"});
+    return res.sendFile(path.join(__dirname, "public", "view.html"));
   }
 });
 
-// Route for the 404 page.
+// Route for handling 404 errors
 app.use((req, res) => {
-    res.status(404).sendFile('404.html', { root: 'public' });
+  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
 
-app.listen(port, () => {
-  console.log(`listening on port ${port} and You can access it by visiting http://localhost:3000`);
-});
+module.exports = app;
