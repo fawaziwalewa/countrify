@@ -1,52 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/assets/images/favicon.png" />
-    <title>Countrify</title>
-    <link rel="stylesheet" href="/assets/app.css" />
-    <script src="/assets/app.js" defer></script>
-  </head>
-  <body
-    x-cloak
-    x-data="{ darkMode: localStorage.getItem('dark') === 'true'} "
-    x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-    x-bind:class="{ 'dark': darkMode }"
-    class="flex flex-col max-w-screen-xl min-h-screen mx-auto font-sans text-vdb-text"
-  >
-    <!-- Header -->
-    <header
-      class="flex justify-between px-3 py-4 bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
-    >
-      <h3 class="font-bold">Where in the world?</h3>
-      <!-- DarkMode button -->
-      <button
-        @click="darkMode = !darkMode"
-        class="flex items-center gap-1 text-sm font-semibold"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-4 h-4"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-          />
-        </svg>
-        <span>Dark Mode</span>
-      </button>
-    </header>
-    <!-- Main -->
-    <main
-      class="flex-grow px-3 py-8 sm:px-12 bg-vlg dark:bg-vdb dark:text-gray-100"
-      loading="lazy"
-      x-data="{  search: '', selectedOption: '', items: [], afterLoad: false, get filteredItems() {
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/assets/images/favicon.png" />
+  <title>Countrify</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+  <script src="/assets/app.js" defer></script>
+</head>
+
+<body x-cloak x-data="{ darkMode: localStorage.getItem('dark') === 'true'} "
+  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))" x-bind:class="{ 'dark': darkMode }"
+  class="flex flex-col max-w-screen-xl min-h-screen mx-auto font-sans text-vdb-text">
+  <!-- Header -->
+  <header class="flex justify-between px-3 py-4 bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12">
+    <h3 class="font-bold">Where in the world?</h3>
+    <!-- DarkMode button -->
+    <button @click="darkMode = !darkMode" class="flex items-center gap-1 text-sm font-semibold">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+      </svg>
+      <span>Dark Mode</span>
+    </button>
+  </header>
+  <!-- Main -->
+  <main class="flex-grow px-3 py-8 sm:px-12 bg-vlg dark:bg-vdb dark:text-gray-100" loading="lazy" x-data="{  search: '', selectedOption: '', items: [], afterLoad: false, get filteredItems() {
             // atferLoad is used to control 'No items to display' text.
             this.afterLoad = true;
             // Filter array. 
@@ -74,106 +55,76 @@
             }
             
             return result;
-        }}"
-      x-init="fetch('/data.json')
+        }}" x-init="fetch('/data.json')
         .then(response => response.json())
-        .then(data => items = data)"
-    >
-      <div class="flex flex-col justify-between gap-6 sm:gap-1 sm:flex-row">
-        <!-- Search form -->
-        <form
-          action="#"
-          method="post"
-          class="flex items-center w-full gap-3 px-4 py-2 bg-white rounded drop-shadow dark:bg-db sm:w-96"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5 text-dg dark:text-gray-100"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
-          <!-- Search input -->
-          <div class="w-full">
-            <label for="search" class="hidden">Search</label>
-            <input
-              type="search"
-              name="search"
-              id="search"
-              x-model="search"
-              placeholder="Search for a country..."
-              class="flex-grow w-full text-sm bg-transparent text-dg dark:text-gray-100 dark:placeholder:text-gray-100 focus:outline-none focus:ring-0"
-            />
-          </div>
-        </form>
-        <!-- Filter select -->
-        <select
-          name="filter"
-          id="filter"
-          title="filter"
-          class="cursor-pointer text-sm font-semibold max-w-[50%] focus:outline-none focus:ring-0 drop-shadow bg-white dark:bg-db rounded px-3 py-2 border-r-[16px] border-transparent min-w-[150px]"
-          x-model="selectedOption"
-        >
-          <option>Filter by Region</option>
-          <option value="africa">Africa</option>
-          <option value="america">America</option>
-          <option value="asia">Asia</option>
-          <option value="europe">Europe</option>
-          <option value="oceania">Oceania</option>
-        </select>
-      </div>
-      <!-- Countries listing -->
-      <div
-        class="grid px-6 mt-8 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 lg:gap-x-12 gap-y-8 sm:px-0"
-      >
-        <!-- Each country card -->
-        <template x-for="(item, index) in filteredItems" :key="index">
-          <a href="#" x-bind:href="'/view/'+item.alpha3Code.toLowerCase()">
-            <div
-              class="text-sm bg-white dark:bg-db rounded drop-shadow overflow-clip w-full max-w-[300px] mx-auto h-full"
-            >
-              <img
-                src="https://flagcdn.com/w320/de.png"
-                alt="country flag"
-                class="object-cover w-full h-[170px]"
-                x-bind:src="item.flag"
-              />
-              <div class="p-4">
-                <h3 class="mt-2 text-xl font-semibold" x-text="item.name">
-                  Germany
-                </h3>
-                <p class="mt-2">
-                  <span class="font-semibold">Population:</span>
-                  <span x-text="item.population">100000</span>
-                </p>
-                <p class="">
-                  <span class="font-semibold">Region:</span>
-                  <span x-text="item.region">Europe</span>
-                </p>
-                <p class="">
-                  <span class="font-semibold">Capital:</span>
-                  <span x-text="item.capital">Berlin</span>
-                </p>
-              </div>
+        .then(data => items = data)">
+    <div class="flex flex-col justify-between gap-6 sm:gap-1 sm:flex-row">
+      <!-- Search form -->
+      <form action="#" method="post"
+        class="flex items-center w-full gap-3 px-4 py-2 bg-white rounded drop-shadow dark:bg-db sm:w-96">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5 text-dg dark:text-gray-100">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <!-- Search input -->
+        <div class="w-full">
+          <label for="search" class="hidden">Search</label>
+          <input type="search" name="search" id="search" x-model="search" placeholder="Search for a country..."
+            class="flex-grow w-full text-sm bg-transparent text-dg dark:text-gray-100 dark:placeholder:text-gray-100 focus:outline-none focus:ring-0" />
+        </div>
+      </form>
+      <!-- Filter select -->
+      <label for="filter" class="sr-only">Filter</label>
+      <select name="filter" id="filter" title="filter"
+        class="cursor-pointer text-sm font-semibold max-w-[50%] focus:outline-none focus:ring-0 drop-shadow bg-white dark:bg-db rounded px-3 py-2 border-r-[16px] border-transparent min-w-[150px]"
+        x-model="selectedOption">
+        <option>Filter by Region</option>
+        <option value="africa">Africa</option>
+        <option value="america">America</option>
+        <option value="asia">Asia</option>
+        <option value="europe">Europe</option>
+        <option value="oceania">Oceania</option>
+      </select>
+    </div>
+    <!-- Countries listing -->
+    <div class="grid px-6 mt-8 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 lg:gap-x-12 gap-y-8 sm:px-0">
+      <!-- Each country card -->
+      <template x-for="(item, index) in filteredItems" :key="index">
+        <a href="#" x-bind:href="'/view/'+item.alpha3Code.toLowerCase()">
+          <div
+            class="text-sm bg-white dark:bg-db rounded drop-shadow overflow-clip w-full max-w-[300px] mx-auto h-full">
+            <img src="https://flagcdn.com/w320/de.png" alt="country flag" class="object-cover w-full h-[170px]"
+              x-bind:src="item.flag" />
+            <div class="p-4">
+              <h3 class="mt-2 text-xl font-semibold" x-text="item.name">
+                Germany
+              </h3>
+              <p class="mt-2">
+                <span class="font-semibold">Population:</span>
+                <span x-text="item.population">100000</span>
+              </p>
+              <p class="">
+                <span class="font-semibold">Region:</span>
+                <span x-text="item.region">Europe</span>
+              </p>
+              <p class="">
+                <span class="font-semibold">Capital:</span>
+                <span x-text="item.capital">Berlin</span>
+              </p>
             </div>
-          </a>
-        </template>
-      </div>
-      <!-- Empty country -->
-      <p :class="(items.length > 0 && afterLoad) ? 'hidden' : ''" class="mt-3 text-3xl font-bold text-center text-gray-300 md:text-5xl">No items to display.</p>
-    </main>
-    <!-- Footer -->
-    <footer
-      class="px-3 py-4 text-center bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12"
-    >
-      <p>Copyright &copy; 2023 Fawaz Iwalewa. All right reserved.</p>
-    </footer>
-  </body>
+          </div>
+        </a>
+      </template>
+    </div>
+    <!-- Empty country -->
+    <p :class="(items.length > 0 && afterLoad) ? 'hidden' : ''"
+      class="mt-3 text-3xl font-bold text-center text-gray-300 md:text-5xl">No items to display.</p>
+  </main>
+  <!-- Footer -->
+  <footer class="px-3 py-4 text-center bg-white drop-shadow dark:text-gray-100 dark:bg-db sm:px-12">
+    <p>Copyright &copy; 2023 Fawaz Iwalewa. All right reserved.</p>
+  </footer>
+</body>
+
 </html>
